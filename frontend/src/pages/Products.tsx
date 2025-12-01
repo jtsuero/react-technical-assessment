@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { getProducts } from "../services/api";
 import "./Products.css";
 
@@ -14,19 +15,26 @@ interface Product {
 }
 
 function Products() {
+	const navigate = useNavigate();
 	const [products, setProducts] = useState<Product[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
+	const [searchTerm, setSearchTerm] = useState("");
+	const [sortBy, setSortBy] = useState("");
 
 	useEffect(() => {
 		fetchProducts();
-	}, []);
+	}, [sortBy]);
 
 	const fetchProducts = async () => {
 		try {
 			setLoading(true);
 			setError("");
-			const response = await getProducts();
+			const params: any = {};
+			if (searchTerm) params.search = searchTerm;
+			if (sortBy) params.sort = sortBy;
+
+			const response = await getProducts(params);
 
 			if (response.data.success) {
 				setProducts(response.data.data.products || []);
@@ -41,6 +49,11 @@ function Products() {
 		} finally {
 			setLoading(false);
 		}
+	};
+
+	const handleSearch = (e: React.FormEvent) => {
+		e.preventDefault();
+		fetchProducts();
 	};
 
 	if (loading) {
@@ -69,15 +82,73 @@ function Products() {
 
 	return (
 		<div className='products-container'>
-			<h1>Products</h1>
+			<div className='products-header'>
+				<h1>Products</h1>
+				<div className='products-controls'>
+					<form onSubmit={handleSearch} className='search-form'>
+						<input
+							type='text'
+							placeholder='Search products...'
+							value={searchTerm}
+							onChange={(e) => setSearchTerm(e.target.value)}
+							className='search-input'
+						/>
+						<button type='submit' className='search-button'>
+							Search
+						</button>
+						{searchTerm && (
+							<button
+								type='button'
+								onClick={() => {
+									setSearchTerm("");
+									setTimeout(() => fetchProducts(), 0);
+								}}
+								className='clear-button'
+							>
+								Clear
+							</button>
+						)}
+					</form>
+					<select
+						value={sortBy}
+						onChange={(e) => setSortBy(e.target.value)}
+						className='sort-select'
+					>
+						<option value=''>Sort by...</option>
+						<option value='price_asc'>Price: Low to High</option>
+						<option value='price_desc'>Price: High to Low</option>
+						<option value='rating'>Highest Rated</option>
+						<option value='newest'>Newest First</option>
+					</select>
+				</div>
+			</div>
 			{products.length === 0 ? (
 				<div className='empty-state'>
-					<p>No products available</p>
+					<p>
+						{searchTerm
+							? `No products found matching "${searchTerm}"`
+							: "No products available"}
+					</p>
+					{searchTerm && (
+						<button
+							onClick={() => {
+								setSearchTerm("");
+								setTimeout(() => fetchProducts(), 0);
+							}}
+							className='clear-search-button'
+						>
+							Clear Search
+						</button>
+					)}
 				</div>
 			) : (
 				<div className='products-grid'>
 					{products.map((product) => (
-						<div key={product.id} className='product-card'>
+						<div
+							key={product.id}
+							className='product-card'
+							onClick={() => navigate(`/products/${product.id}`)}
+						>
 							<div className='product-image'>
 								{product.images?.[0] ? (
 									<img

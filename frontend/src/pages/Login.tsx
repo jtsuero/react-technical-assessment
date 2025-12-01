@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/api";
 import "./Login.css";
@@ -9,6 +9,14 @@ function Login() {
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
+
+	// Redirect to products if already logged in
+	useEffect(() => {
+		const token = localStorage.getItem("token");
+		if (token) {
+			navigate("/products", { replace: true });
+		}
+	}, [navigate]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
