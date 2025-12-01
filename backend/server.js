@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import db from './config/database.js';
 import { mockData } from './data/mockData.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
@@ -14,7 +16,18 @@ import reviewRoutes from './routes/reviewRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 
 // Load environment variables
-dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+dotenv.config({ path: join(__dirname, '.env') });
+
+// Validate required environment variables
+if (!process.env.JWT_SECRET) {
+  console.error('❌ ERROR: JWT_SECRET is not set in environment variables!');
+  console.error('Please create a .env file with JWT_SECRET or set it as an environment variable.');
+  process.exit(1);
+}
 
 // Provide CommonJS require for ESM files
 if (!global.require) {
