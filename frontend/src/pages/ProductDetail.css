@@ -261,6 +261,40 @@
 	color: #742a2a;
 }
 
+/* Success and Error Messages */
+.success-message {
+	background-color: #c6f6d5;
+	color: #22543d;
+	padding: 0.875rem 1rem;
+	border-radius: 8px;
+	margin-top: 1rem;
+	font-size: 0.9rem;
+	border-left: 4px solid #22543d;
+	animation: slideIn 0.3s ease;
+}
+
+.error-message-inline {
+	background-color: #fed7d7;
+	color: #c53030;
+	padding: 0.875rem 1rem;
+	border-radius: 8px;
+	margin-top: 1rem;
+	font-size: 0.9rem;
+	border-left: 4px solid #c53030;
+	animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
 /* Loading and Error States */
 .loading-spinner,
 .error-container {

@@ -27,6 +27,8 @@ function ProductDetail() {
 	const [quantity, setQuantity] = useState(1);
 	const [addingToCart, setAddingToCart] = useState(false);
 	const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+	const [successMessage, setSuccessMessage] = useState("");
+	const [errorMessage, setErrorMessage] = useState("");
 
 	useEffect(() => {
 		if (id) {
@@ -60,11 +62,16 @@ function ProductDetail() {
 
 		try {
 			setAddingToCart(true);
+			setSuccessMessage("");
+			setErrorMessage("");
 			await addToCart(product.id, quantity);
-			// Show success message (you could add a toast notification here)
-			alert("Item added to cart!");
+			setSuccessMessage("Item added to cart!");
+			// Clear success message after 3 seconds
+			setTimeout(() => setSuccessMessage(""), 3000);
 		} catch (err: any) {
-			alert(err.message || "Failed to add item to cart");
+			setErrorMessage(err.message || "Failed to add item to cart");
+			// Clear error message after 5 seconds
+			setTimeout(() => setErrorMessage(""), 5000);
 		} finally {
 			setAddingToCart(false);
 		}
@@ -221,6 +228,13 @@ function ProductDetail() {
 							</button>
 						)}
 					</div>
+
+					{successMessage && (
+						<div className='success-message'>{successMessage}</div>
+					)}
+					{errorMessage && (
+						<div className='error-message-inline'>{errorMessage}</div>
+					)}
 
 					<div className='stock-info'>
 						{product.stock > 0 ? (
