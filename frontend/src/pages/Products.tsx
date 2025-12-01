@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { getProducts } from "../services/api";
 import "./Products.css";
 
@@ -14,6 +15,7 @@ interface Product {
 }
 
 function Products() {
+	const navigate = useNavigate();
 	const [products, setProducts] = useState<Product[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
@@ -77,7 +79,11 @@ function Products() {
 			) : (
 				<div className='products-grid'>
 					{products.map((product) => (
-						<div key={product.id} className='product-card'>
+						<div
+							key={product.id}
+							className='product-card'
+							onClick={() => navigate(`/products/${product.id}`)}
+						>
 							<div className='product-image'>
 								{product.images?.[0] ? (
 									<img
