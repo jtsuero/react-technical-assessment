@@ -1,73 +1,119 @@
-# React + TypeScript + Vite
+# Marketplace Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + TypeScript application built with Vite for the Marketplace e-commerce platform.
 
-Currently, two official plugins are available:
+## Prerequisites
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Node.js** (v18 or higher recommended)
+- **npm** (comes with Node.js)
+- **Backend API** running on `http://localhost:3000` (see backend README for setup)
 
-## React Compiler
+## Installation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-## Expanding the ESLint configuration
+## Environment Variables
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The app uses environment variables for configuration. Create a `.env` file in the frontend directory:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```env
+# API Configuration
+VITE_API_URL=http://localhost:3000/api
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+For production, update `VITE_API_URL` to your production API URL.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+> **Note:** If no `.env` file is provided, the app defaults to `http://localhost:3000/api`
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Running the Application
+
+### Development Mode
+
+Start the development server:
+
+```bash
+npm run dev
 ```
+
+The app will be available at `http://localhost:5173` (or the next available port).
+
+### Build for Production
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+The built files will be in the `dist/` directory.
+
+### Preview Production Build
+
+Preview the production build locally:
+
+```bash
+npm run preview
+```
+
+## Available Scripts
+
+- `npm run dev` - Start development server with hot module replacement
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint to check code quality
+
+## Features
+
+- ✅ User authentication (Login/Logout)
+- ✅ Product browsing with search and sorting
+- ✅ Product detail pages
+- ✅ Shopping cart functionality
+- ✅ Protected routes
+- ✅ Responsive design
+- ✅ Error handling and loading states
+
+## Test Credentials
+
+- **Email:** `john.doe@example.com`
+- **Password:** `password123`
+
+## Project Structure
+
+```
+src/
+├── components/       # Reusable components (Navbar, ProtectedRoute)
+├── context/          # React Context providers (CartContext)
+├── pages/            # Page components (Login, Products, ProductDetail, Cart)
+├── services/         # API service layer
+├── App.tsx           # Main app component with routing
+└── main.tsx          # Application entry point
+```
+
+## Tech Stack
+
+- **React 19** - UI library
+- **TypeScript** - Type safety
+- **Vite** - Build tool and dev server
+- **React Router** - Client-side routing
+- **Axios** - HTTP client for API calls
+
+## Troubleshooting
+
+### Backend Connection Issues
+
+If you see API errors:
+
+1. Ensure the backend server is running on `http://localhost:3000`
+2. Check that `VITE_API_URL` in `.env` matches your backend URL
+3. Verify CORS is enabled on the backend
+
+### Port Already in Use
+
+If port 5173 is already in use, Vite will automatically use the next available port. Check the terminal output for the actual URL.
+
+## License
+
+ISC
